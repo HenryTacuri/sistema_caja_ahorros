@@ -62,7 +62,7 @@ public class CreditoServicesImpl implements CreditoService {
     }
 
     @Override
-    public CreditoResponse buscarCreditos(Long idCuenta) {
+    public CreditoResponse buscarCreditoPorId(Long idCuenta) {
         var creditoResponse = new CreditoResponse();
         var data = new ArrayList<Credito>();
         var infoList = new ArrayList<InfoRest>();

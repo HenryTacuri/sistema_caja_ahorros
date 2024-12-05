@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import software.sistema.caja_ahorros.Controller.response.SocioResponse;
+import software.sistema.caja_ahorros.Controller.response.TransaccionResponse;
 import software.sistema.caja_ahorros.Controller.response.UsuarioResponse;
 import software.sistema.caja_ahorros.Controller.response.InfoRest;
 import software.sistema.caja_ahorros.model.Socio;

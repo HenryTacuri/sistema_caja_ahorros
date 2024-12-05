@@ -7,7 +7,7 @@ public interface CreditoService {
 
     public CreditoResponse registrarCredito(Credito credito, Long idCuenta);
     public CreditoResponse actualizarCredito(Credito cuenta, Long idCuenta);
-    public CreditoResponse buscarCreditos(Long idCuenta);
+    public CreditoResponse buscarCreditoPorId(Long idCuenta);
     public CreditoResponse obtenerCreditos();
 
 }
