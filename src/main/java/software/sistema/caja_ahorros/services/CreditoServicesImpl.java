@@ -48,24 +48,46 @@ public class CreditoServicesImpl implements CreditoService {
         var creditoResponse = new CreditoResponse();
         var data = new ArrayList<Credito>();
         var infoList = new ArrayList<InfoRest>();
-
-        // Buscar la cuenta asociada al ID
         var cuentaOptional = cuentaRepository.findById(String.valueOf(idCuenta));
         if (cuentaOptional.isEmpty()) {
             throw new IllegalArgumentException("La cuenta con ID " + idCuenta + " no existe.");
         }
-
-        // Obtener la cuenta y asociarla al crédito
         Cuenta cuenta = cuentaOptional.get();
         credito.setCuenta(cuenta);
-
-        // Actualizar el crédito
         data.add(this.creditoRepository.save(credito));
-
-        // Configurar la respuesta
         creditoResponse.setData(data);
         creditoResponse.setInfoList(infoList);
 
+        return creditoResponse;
+    }
+
+    @Override
+    public CreditoResponse buscarCreditos(Long idCuenta) {
+        var creditoResponse = new CreditoResponse();
+        var data = new ArrayList<Credito>();
+        var infoList = new ArrayList<InfoRest>();
+        var cuentaOptional = cuentaRepository.findById(String.valueOf(idCuenta));
+        if (cuentaOptional.isEmpty()) {
+            throw new IllegalArgumentException("La cuenta con ID " + idCuenta + " no existe.");
+        }
+        Cuenta cuenta = cuentaOptional.get();
+        var credito = this.creditoRepository.findById(String.valueOf(idCuenta));
+        data.add(credito.get());
+        creditoResponse.setData(data);
+        creditoResponse.setInfoList(infoList);
+
+        return creditoResponse;
+    }
+
+    @Override
+    public CreditoResponse obtenerCreditos() {
+        var creditoResponse = new CreditoResponse();
+        var data = new ArrayList<Credito>();
+        var infoList = new ArrayList<InfoRest>();
+        var creditos = this.creditoRepository.findAll(); 
+        data.addAll(creditos); 
+        creditoResponse.setData(data);
+        creditoResponse.setInfoList(infoList);
         return creditoResponse;
     }
 
