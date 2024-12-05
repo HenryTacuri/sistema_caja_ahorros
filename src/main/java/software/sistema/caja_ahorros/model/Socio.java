@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.List;
+
 @Entity(name = "socio")
 public class Socio {
 
@@ -12,25 +14,28 @@ public class Socio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(groups = Usuario.class)
+    @NotBlank(groups = Socio.class)
     @Column(name = "nombre", length = 200)
     private String nombre;
 
-    @NotBlank(groups = Usuario.class)
+    @NotBlank(groups = Socio.class)
     @Column(name = "cedula", length = 200)
     private String cedula;
 
-    @NotBlank(groups = Usuario.class)
+    @NotBlank(groups = Socio.class)
     @Column(name = "direccion", length = 200)
     private String direccion;
 
-    @NotBlank(groups = Usuario.class)
+    @NotBlank(groups = Socio.class)
     @Column(name = "telefono", length = 200)
     private String telefono;
 
     @OneToOne(mappedBy = "socio")
     @JsonIgnore
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "socio", cascade = CascadeType.ALL)
+    private List<Cuenta> cuentas;
 
     //Getters y Setters
     public Long getId() {
@@ -81,6 +86,13 @@ public class Socio {
         this.usuario = usuario;
     }
 
+    public List<Cuenta> getCuentas() {
+        return cuentas;
+    }
+
+    public void setCuentas(List<Cuenta> cuentas) {
+        this.cuentas = cuentas;
+    }
 
     //toString
     @Override
@@ -92,6 +104,7 @@ public class Socio {
                 ", direccion='" + direccion + '\'' +
                 ", telefono='" + telefono + '\'' +
                 ", usuario=" + usuario +
+                ", cuentas=" + cuentas +
                 '}';
     }
 }
