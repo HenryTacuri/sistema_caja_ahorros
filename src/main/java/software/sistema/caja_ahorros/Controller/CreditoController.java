@@ -25,7 +25,7 @@ public class CreditoController {
     @Autowired
     private CreditoService creditoService;
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<CreditoResponse> obtenerCreditos() {
         try {
             var creditoResponse = this.creditoService.obtenerCreditos();
@@ -40,10 +40,42 @@ public class CreditoController {
         }
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CreditoResponse> buscarCreditoPorId(@PathVariable Long id) {
         try {
             var creditoResponse = this.creditoService.buscarCreditoPorId(id);
+            creditoResponse.getInfoList().add(new InfoRest(1, "Respuesta Ok", 1));
+            return new ResponseEntity<>(creditoResponse, HttpStatus.OK);
+        } catch (Exception e1) {
+            var creditoResponse = new CreditoResponse();
+            var infoList = new ArrayList<InfoRest>();
+            infoList.add(new InfoRest(2, e1.getMessage(), 0));
+            creditoResponse.setInfoList(infoList);
+            return new ResponseEntity<>(creditoResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/{idCuenta}")
+    public ResponseEntity<CreditoResponse> registrarCredito(@Valid @RequestBody Credito credito,
+            @PathVariable Long idCuenta) {
+        try {
+            var creditoResponse = this.creditoService.registrarCredito(credito, idCuenta);
+            creditoResponse.getInfoList().add(new InfoRest(1, "Respuesta Ok", 1));
+            return new ResponseEntity<>(creditoResponse, HttpStatus.CREATED);
+        } catch (Exception e1) {
+            var creditoResponse = new CreditoResponse();
+            var infoList = new ArrayList<InfoRest>();
+            infoList.add(new InfoRest(2, e1.getMessage(), 0));
+            creditoResponse.setInfoList(infoList);
+            return new ResponseEntity<>(creditoResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/{idCuenta}")
+    public ResponseEntity<CreditoResponse> actualizarCredito(@RequestBody Credito credito,
+            @PathVariable Long idCuenta) {
+        try {
+            var creditoResponse = this.creditoService.actualizarCredito(credito, idCuenta);
             creditoResponse.getInfoList().add(new InfoRest(1, "Respuesta Ok", 1));
             return new ResponseEntity<>(creditoResponse, HttpStatus.OK);
         } catch (Exception e1) {
