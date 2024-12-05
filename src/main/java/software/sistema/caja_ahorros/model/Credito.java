@@ -1,12 +1,6 @@
 package software.sistema.caja_ahorros.model;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @Entity(name = "credito")
 public class Credito {
