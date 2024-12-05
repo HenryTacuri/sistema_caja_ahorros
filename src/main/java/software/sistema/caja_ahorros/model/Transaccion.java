@@ -36,6 +36,11 @@ public class Transaccion {
     @JsonIgnore
     private Cuenta cuenta;
 
+    @ManyToOne
+    @JoinColumn(name = "diario_caja_id")
+    @JsonIgnore
+    private DiarioCaja diarioCaja;
+
     //Getters y Setters
     public Long getId() {
         return id;

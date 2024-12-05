@@ -45,6 +45,9 @@ public class DiarioCaja {
     public void setTransacciones(List<Transaccion> transacciones) {
         this.transacciones = transacciones;
     }
+    public void setInTransaccion(Transaccion transaccion){
+        this.transacciones.add(transaccion);
+    }
 
     // toString
     @Override

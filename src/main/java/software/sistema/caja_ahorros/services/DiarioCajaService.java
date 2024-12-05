@@ -4,9 +4,9 @@ import software.sistema.caja_ahorros.model.DiarioCaja;
 
 public interface DiarioCajaService {
 
-    public DiarioCajaResponse registrarDiarioCaja(DiarioCaja diarioCaja);
+    public DiarioCajaResponse registrarDiarioCaja(DiarioCaja diarioCaja, Long idtransaccion);
 
-    public DiarioCajaResponse actualizarDiarioCaja(DiarioCaja diarioCaja);
+    public DiarioCajaResponse actualizarDiarioCaja(DiarioCaja diarioCaja,  Long idtransaccion);
 
     public DiarioCajaResponse eliminarDiarioCaja(Integer id);
 

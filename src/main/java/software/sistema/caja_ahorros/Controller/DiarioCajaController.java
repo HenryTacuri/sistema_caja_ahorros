@@ -49,10 +49,10 @@ public class DiarioCajaController {
         }
     }
 
-    @PostMapping()
-    public ResponseEntity<DiarioCajaResponse> registrarDiarioCaja(@Valid @RequestBody DiarioCaja diarioCaja) {
+    @PostMapping("/{idtransaccion}")
+    public ResponseEntity<DiarioCajaResponse> registrarDiarioCaja(@Valid @RequestBody DiarioCaja diarioCaja,@PathVariable Long idtransaccion) {
         try {
-            var diarioCajaResponse = this.diarioCajaService.registrarDiarioCaja(diarioCaja);
+            var diarioCajaResponse = this.diarioCajaService.registrarDiarioCaja(diarioCaja, idtransaccion);
             diarioCajaResponse.getInfoList().add(new InfoRest(1, "Respuesta Ok", 1));
             return new ResponseEntity<>(diarioCajaResponse, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -64,10 +64,10 @@ public class DiarioCajaController {
         }
     }
 
-    @PutMapping()
-    public ResponseEntity<DiarioCajaResponse> actualizarDiarioCaja(@RequestBody DiarioCaja diarioCaja) {
+    @PutMapping("/{idtransaccion}")
+    public ResponseEntity<DiarioCajaResponse> actualizarDiarioCaja(@RequestBody DiarioCaja diarioCaja,@PathVariable Long idtransaccion) {
         try {
-            var diarioCajaResponse = this.diarioCajaService.actualizarDiarioCaja(diarioCaja);
+            var diarioCajaResponse = this.diarioCajaService.actualizarDiarioCaja(diarioCaja, idtransaccion);
             diarioCajaResponse.getInfoList().add(new InfoRest(1, "Respuesta Ok", 1));
             return new ResponseEntity<>(diarioCajaResponse, HttpStatus.OK);
         } catch (Exception e) {
