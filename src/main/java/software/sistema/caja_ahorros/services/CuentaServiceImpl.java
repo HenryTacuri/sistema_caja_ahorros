@@ -31,6 +31,7 @@ public class CuentaServiceImpl implements CuentaService {
 
         cuenta.setSocio(socioBuscado.get());
         data.add(this.cuentaRepository.save(cuenta));
+        
         cuentaResponse.setData(data);
         cuentaResponse.setInfoList(infoList);
 
