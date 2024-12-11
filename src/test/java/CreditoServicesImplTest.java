@@ -107,6 +107,33 @@ public class CreditoServicesImplTest {
         verify(creditoRepository, times(1)).save(credito);
     }
 
+    @Test
+    public void getCreditoByIdTest() {
+        Cuenta cuenta = new Cuenta();
+        cuenta.setId(Long.valueOf("1"));
+        cuenta.setNumeroCuenta(12875);
+        cuenta.setSaldo(BigDecimal.valueOf(100));
+
+        when(cuentaRepository.findById("1")).thenReturn(Optional.of(cuenta));
+        Credito credito = new Credito();
+        credito.setId(1L);
+        when(creditoRepository.findById("1")).thenReturn(Optional.of(credito));
+
+        CreditoResponse response = creditoService.buscarCreditoPorId(1L);
+        assertNotNull(response.getData());
+        Assertions.assertEquals(1L, response.getData().get(0).getId());
+    }
+
+
+    @Test
+    public void obtenerCreditosTest(){
+        when(creditoRepository.findAll()).thenReturn(this.CreditoList);
+        CreditoResponse response = creditoService.obtenerCreditos();
+
+        assertEquals(1,response.getData().size());
+        verify(this.creditoRepository,times(1)).findAll();
+    }
+
 
     private void cargarDatos() {
         Credito credito1 = new Credito();
