@@ -63,21 +63,39 @@ public class CreditoServicesImpl implements CreditoService {
 
     @Override
     public CreditoResponse buscarCreditoPorId(Long idCuenta) {
+        // Crear objeto de respuesta
         var creditoResponse = new CreditoResponse();
         var data = new ArrayList<Credito>();
         var infoList = new ArrayList<InfoRest>();
+
+        // Buscar la cuenta por su ID
         var cuentaOptional = cuentaRepository.findById(String.valueOf(idCuenta));
         if (cuentaOptional.isEmpty()) {
             throw new IllegalArgumentException("La cuenta con ID " + idCuenta + " no existe.");
         }
+
+        // Obtener la cuenta encontrada
         Cuenta cuenta = cuentaOptional.get();
-        var credito = this.creditoRepository.findById(String.valueOf(idCuenta));
-        data.add(credito.get());
+
+        // Buscar el crédito asociado a la cuenta
+        var creditoOptional = creditoRepository.findById(String.valueOf(idCuenta));
+        if (creditoOptional.isEmpty()) {
+            throw new IllegalArgumentException("No se encontró crédito asociado a la cuenta con ID " + idCuenta);
+        }
+
+        // Obtener el crédito encontrado
+        Credito credito = creditoOptional.get();
+
+        // Agregar el crédito a la lista de datos de la respuesta
+        data.add(credito);
+
+        // Establecer los datos y la información adicional en la respuesta
         creditoResponse.setData(data);
         creditoResponse.setInfoList(infoList);
 
         return creditoResponse;
     }
+
 
     @Override
     public CreditoResponse obtenerCreditos() {

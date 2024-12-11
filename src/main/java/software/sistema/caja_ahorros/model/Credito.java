@@ -2,6 +2,8 @@ package software.sistema.caja_ahorros.model;
 import jakarta.persistence.*;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity(name = "credito")
 public class Credito {
 
@@ -20,6 +22,7 @@ public class Credito {
 
     @ManyToOne
     @JoinColumn(name = "cuenta_id")
+    @JsonIgnore
     private Cuenta cuenta;
 
     public Long getId() {
