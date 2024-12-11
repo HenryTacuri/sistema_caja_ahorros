@@ -1,6 +1,4 @@
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,15 +10,20 @@ import software.sistema.caja_ahorros.model.Cuenta;
 import software.sistema.caja_ahorros.repositories.CreditoRepository;
 import software.sistema.caja_ahorros.repositories.CuentaRepository;
 import software.sistema.caja_ahorros.services.CreditoServicesImpl;
-
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class CreditoServicesImplTest {
     @InjectMocks
@@ -32,9 +35,8 @@ public class CreditoServicesImplTest {
     @Mock
     private CuentaRepository cuentaRepository;
 
-    private Cuenta mockCuenta;
-    private Credito mockCredito;
     private List<Credito> CreditoList= new ArrayList<>();
+    private List<Cuenta> CuentaList= new ArrayList<>();
 
     @BeforeEach
     public void init() {
@@ -42,18 +44,68 @@ public class CreditoServicesImplTest {
         cargarDatos();
     }
 
-
     @Test
-    public void consultarCreditos(){
-        when(creditoRepository.findAll()).thenReturn(this.CreditoList);
-        CreditoResponse response = creditoService.obtenerCreditos();
+    public void registrarCreditoTest() {
+        Cuenta cuenta = new Cuenta();
+        cuenta.setId(Long.valueOf("1"));
+        cuenta.setNumeroCuenta(12875);
+        cuenta.setSaldo(BigDecimal.valueOf(100));
 
-        assertEquals(1,response.getData().size());
-        verify(this.creditoRepository,times(1)).findAll();
+        Credito credito = new Credito();
+        credito.setId(Long.valueOf("1"));
+        credito.setValor(450.34); // Valor del crédito a agregar
+        LocalDate fechaA = LocalDate.of(2024, 10, 12);
+        LocalDate fechaL = LocalDate.of(2024, 10, 12);
+        Date fechaAcreditada = Date.from(fechaA.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date fechaLiquidacion = Date.from(fechaL.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        credito.setFechaAcreditada(fechaAcreditada);
+        credito.setFechaLiquidacion(fechaLiquidacion);
+
+        when(cuentaRepository.findById("1")).thenReturn(Optional.of(cuenta));
+        when(cuentaRepository.save(cuenta)).thenReturn(cuenta);
+        when(creditoRepository.save(credito)).thenReturn(credito);
+        CreditoResponse response = creditoService.registrarCredito(credito, 1L);
+        assertEquals(BigDecimal.valueOf(550.34), cuenta.getSaldo());
+
+        assertNotNull(response.getData());
+        assertEquals(1, response.getData().size());
+        assertEquals(1L, response.getData().get(0).getId());
+        assertEquals(cuenta, credito.getCuenta());
+
+        verify(cuentaRepository).findById("1");
+        verify(cuentaRepository).save(cuenta);
+        verify(creditoRepository).save(credito);
     }
 
-    
+    @Test
+    public void actualizarCreditoTest() {
+        Cuenta cuenta = new Cuenta();
+        cuenta.setId(Long.valueOf("1"));
+        cuenta.setNumeroCuenta(12875);
+        cuenta.setSaldo(BigDecimal.valueOf(100));
 
+        Credito credito = new Credito();
+        credito.setId(Long.valueOf("1"));
+        credito.setValor(450.34);
+        LocalDate fechaA = LocalDate.of(2024, 10, 12);
+        LocalDate fechaL = LocalDate.of(2024, 10, 12);
+        Date fechaAcreditada = Date.from(fechaA.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date fechaLiquidacion = Date.from(fechaL.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        credito.setFechaAcreditada(fechaAcreditada);
+        credito.setFechaLiquidacion(fechaLiquidacion);
+
+        when(cuentaRepository.findById("1")).thenReturn(Optional.of(cuenta));
+        when(creditoRepository.save(credito)).thenReturn(credito);
+
+        CreditoResponse response = creditoService.actualizarCredito(credito, 1L);
+
+        assertNotNull(response);
+        assertNotNull(response.getData());
+        assertEquals(1, response.getData().size());
+        assertEquals(credito, response.getData().get(0));
+
+        verify(creditoRepository, times(1)).save(credito);
+    }
 
 
     private void cargarDatos() {
@@ -69,4 +121,5 @@ public class CreditoServicesImplTest {
 
         CreditoList.add(credito1);
     }
+
 }
