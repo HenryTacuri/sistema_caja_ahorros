@@ -97,4 +97,19 @@ public class UsuarioCotroller {
         }
     }
 
+    @GetMapping("/{correo}/{contrasenia}")
+    public ResponseEntity<UsuarioResponse> login(@PathVariable String correo, @PathVariable String contrasenia) {
+        try{
+            var usuarioResponse = this.usuarioService.login(correo, contrasenia);
+            usuarioResponse.getInfoList().add(new InfoRest(1,"Respuesta Ok",1));
+            return new ResponseEntity<>(usuarioResponse, HttpStatus.OK);
+        }catch(Exception e1){
+            var usuarioResponse = new UsuarioResponse();
+            var infoList = new ArrayList<InfoRest>();
+            infoList.add(new InfoRest(2,e1.getMessage(),0));
+            usuarioResponse.setInfoList(infoList);
+            return new ResponseEntity<>(usuarioResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

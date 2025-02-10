@@ -102,4 +102,22 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioResponse;
     }
 
+    @Override
+    @Transactional
+    public UsuarioResponse login(String correo, String contrasenia) {
+        var usuarioResponse = new UsuarioResponse();
+        var data = new ArrayList<Usuario>();
+        var infoList = new ArrayList<InfoRest>();
+        var usuarioBuscado = this.usuarioRepository.findByCorreoAndContrasenia(correo, contrasenia);
+
+        if(usuarioBuscado.isPresent()){
+            data.add(usuarioBuscado.get());
+        }else{
+            infoList.add(new InfoRest(1,"Usuario no encontrado",1));
+        }
+        usuarioResponse.setData(data);
+        usuarioResponse.setInfoList(infoList);
+        return usuarioResponse;
+    }
+
 }

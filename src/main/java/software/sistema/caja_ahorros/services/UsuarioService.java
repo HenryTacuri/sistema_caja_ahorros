@@ -15,4 +15,6 @@ public interface UsuarioService {
 
     public UsuarioResponse obtenerUsuarios();
 
+    public UsuarioResponse login(String correo, String contrasenia);
+
 }
